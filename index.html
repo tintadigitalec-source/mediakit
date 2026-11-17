@@ -257,7 +257,7 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 
 <div style="margin-top: 28px; background: #0b0b0b; border: 3px dashed #ffffff; padding: 22px 28px">
 <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-<p class="bebas" style="margin: 0; font-size: 32px">TUS REGALOS <span style="color: #f23b3b">· <span data-h="bonusValue"></span> EN CONTENIDO EXTRA</span></p>
+<p class="bebas" style="margin: 0; font-size: 32px">TE LLEVAS GRATIS <span style="color: #f23b3b">· <span data-h="bonusValue"></span> EN CONTENIDO</span></p>
 <p style="margin: 0; font-size: 15px; color: #ffd36b; font-weight: 600"><span data-h="nextHint"></span></p>
 </div>
 <div style="height: 14px; background: #2a2a2a; margin-top: 14px"><div data-tpl-style="height: 14px; width: [[bonusBar]]; background: #f23b3b; transition: width .4s"></div></div>
@@ -290,11 +290,11 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 </div>
 <div style="flex: 1 1 420px">
 <p class="bebas" style="margin: 0; font-size: clamp(30px, 3vw, 42px); line-height: 1.2">CUÉNTANOS LO QUE BUSCAS, EL TIEMPO Y EL PRESUPUESTO CON EL QUE CUENTAS Y TE ARMAMOS UN PAQUETE CREATIVO Y ESTRATÉGICAMENTE PENSADO PARA POSICIONAR TUS IDEAS!</p>
-<p style="margin: 18px 0 0; font-size: 18px; line-height: 1.5; color: #e6e6e6">Los precios de la tabla son el punto de partida, no el techo. Así trabajamos: cuando armas un paquete con nosotros, <strong style="color: #ffffff">siempre te llevas contenido extra de regalo</strong>, y mientras más grande el paquete, más grande el regalo.</p>
+<p style="margin: 18px 0 0; font-size: 18px; line-height: 1.5; color: #e6e6e6">Los precios de la tabla son el punto de partida, no el techo. Así trabajamos: cuando armas un paquete con nosotros, <strong style="color: #ffffff">siempre te llevas contenido gratis</strong>, y mientras más grande el paquete, más grande el regalo.</p>
 </div>
 </div>
 
-<h3 class="bebas" style="margin: 64px 0 0; font-size: clamp(44px, 5vw, 72px); line-height: 1">MIENTRAS MÁS GRANDE TU PAQUETE, <span style="color: #f23b3b">MÁS TE REGALAMOS</span></h3>
+<h3 class="bebas" style="margin: 64px 0 0; font-size: clamp(44px, 5vw, 72px); line-height: 1">MIENTRAS MÁS GRANDE TU PAQUETE, <span style="color: #f23b3b">MÁS TE LLEVAS GRATIS</span></h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 28px">
 <div data-slot="tiers" style="display: contents"></div>
 </div>
@@ -468,8 +468,8 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 <div class="card" style="background: #ffffff; color: #0b0b0b; padding: 26px; border: 3px solid #0b0b0b; box-shadow: 10px 10px 0 {{t.shadow}}; display: flex; flex-direction: column; gap: 10px">
 <p class="bebas" style="margin: 0; align-self: flex-start; background: {{t.shadow}}; color: #ffffff; font-size: 22px; padding: 4px 14px; transform: rotate(-2deg)">NIVEL {{t.n}} · {{t.name}}</p>
 <p class="bebas" style="margin: 6px 0 0; font-size: 30px; line-height: 1">{{t.cond}}</p>
-<p style="margin: 0; font-size: 16px; line-height: 1.5">Te regalamos <strong>{{t.gift}}</strong></p>
-<p class="bebas" style="margin: auto 0 0; font-size: 40px; color: #d12a2a">{{t.value}} <span style="font-size: 20px; color: #0b0b0b">EN CONTENIDO EXTRA</span></p>
+<p style="margin: 0; font-size: 16px; line-height: 1.5">Te llevas gratis: <strong>{{t.gift}}</strong></p>
+<p class="bebas" style="margin: auto 0 0; font-size: 40px; color: #d12a2a">{{t.value}} <span style="font-size: 20px; color: #0b0b0b">GRATIS</span></p>
 </div>
 </template>
 
@@ -649,7 +649,7 @@ class Component extends DCLogic {
       const on = k + 1 === lvl, past = k + 1 < lvl;
       return {
         text: 'Nivel ' + t.n + ': ' + t.gift + ' (valor $' + t.v.toLocaleString('en-US') + ')',
-        state: on ? '¡Tu regalo!' : (past ? 'Superado →' : 'Por desbloquear:'),
+        state: on ? '¡Te lo llevas gratis!' : (past ? 'Superado →' : 'Por desbloquear:'),
         bg: on ? '#f23b3b' : 'transparent', fg: on ? '#ffffff' : (past ? '#8a8a8a' : '#bdbdbd'), border: on ? '#f23b3b' : '#4a4a4a'
       };
     });
@@ -658,9 +658,9 @@ class Component extends DCLogic {
     else {
       const nx = T[lvl];
       const faltan = Math.max(0, nx.pcs - count);
-      nextHint = (count === 0 ? 'Agrega piezas y empieza a desbloquear regalos. ' : '') + 'Con ' + faltan + ' pieza(s) más' + (nx.amt ? ' o pasando de $' + nx.amt.toLocaleString('en-US') : '') + ' subes al nivel ' + nx.n + ': ' + nx.gift + '.';
+      nextHint = (count === 0 ? 'Agrega piezas y empieza a llevarte contenido gratis. ' : '') + 'Con ' + faltan + ' pieza(s) más' + (nx.amt ? ' o pasando de $' + nx.amt.toLocaleString('en-US') : '') + ' subes al nivel ' + nx.n + ' y te llevas gratis: ' + nx.gift + '.';
     }
-    const giftTxt = cur ? ' Regalo nivel ' + cur.n + ': ' + cur.gift + '.' : '';
+    const giftTxt = cur ? ' Nivel ' + cur.n + ', gratis: ' + cur.gift + '.' : '';
     const msg = chosen.length
       ? 'Hola Tinta Digital, quiero cotizar: ' + chosen.map((it) => q[it.id] + ' x ' + it.name).join(', ') + ' (estimado $' + total.toLocaleString('en-US') + ' + IVA).' + giftTxt
       : 'Hola Tinta Digital, quiero cotizar una pauta con ustedes.';
