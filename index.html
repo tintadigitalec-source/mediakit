@@ -255,15 +255,17 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 <p class="bebas" style="margin: 0; padding: 14px 24px; text-align: right; font-size: 26px">VALORES <span style="color: #d12a2a">NO</span> INCLUYEN IVA</p>
 </div>
 
-<div style="margin-top: 28px; background: #0b0b0b; border: 3px dashed #ffffff; padding: 22px 28px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-<p class="bebas" style="margin: 0; font-size: 32px">TE LLEVAS GRATIS <span style="color: #f23b3b">· <span data-h="bonusValue"></span> EN CONTENIDO</span></p>
-<p style="margin: 0; font-size: 15px; color: #ffd36b; font-weight: 600"><span data-h="nextHint"></span></p>
+<div style="margin-top: 28px; background: #0b0b0b; border: 3px solid #ffffff; padding: 28px">
+<p class="bebas" style="margin: 0; font-size: 22px; color: #f23b3b; letter-spacing: .06em">LO QUE TE LLEVAS GRATIS</p>
+<p class="bebas" style="margin: 4px 0 0; font-size: clamp(34px, 4vw, 52px); line-height: 1"><span data-h="statusTitle"></span></p>
+<p style="margin: 8px 0 0; font-size: 17px; line-height: 1.5; color: #ffd36b; font-weight: 600"><span data-h="statusSub"></span></p>
+<div style="margin-top: 22px; height: 16px; background: #2a2a2a"><div data-tpl-style="height: 16px; width: [[bonusBar]]; background: #f23b3b; transition: width .4s"></div></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 6px; font-size: 13px; font-weight: 700; color: #bdbdbd; text-align: right">
+<span>2 piezas</span><span>4 piezas</span><span>6 piezas</span><span>8 piezas</span>
 </div>
-<div style="height: 14px; background: #2a2a2a; margin-top: 14px"><div data-tpl-style="height: 14px; width: [[bonusBar]]; background: #f23b3b; transition: width .4s"></div></div>
-<ul style="list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 18px">
 <div data-slot="bonuses" style="display: contents"></div>
-</ul>
+</div>
 </div>
 
 <div style="margin-top: 18px; background: #f23b3b; padding: 22px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; border: 3px solid #ffffff">
@@ -459,10 +461,15 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 </div>
 </template>
 <template data-for="bonuses" data-as="b">
-<li style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 2px solid {{b.border}}; background: {{b.bg}}; color: {{b.fg}}; transition: background .3s">
-<svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" style="flex: 0 0 22px; margin-top: 1px"><rect x="3" y="8" width="18" height="13"></rect><path d="M3 12h18M12 8v13M12 8c-2-4-6-4-6-1.5S10 8 12 8zm0 0c2-4 6-4 6-1.5S14 8 12 8z"></path></svg>
-<span style="font-size: 15px; line-height: 1.4"><strong>{{b.state}}</strong> {{b.text}}</span>
-</li>
+<div style="border: 3px solid {{b.border}}; background: {{b.bg}}; color: {{b.fg}}; padding: 18px; display: flex; flex-direction: column; gap: 8px; transition: background .3s">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+<span class="bebas" style="font-size: 32px; line-height: 1">NIVEL {{b.n}}</span>
+<span class="bebas" style="font-size: 17px; padding: 3px 10px; background: {{b.tagBg}}; color: {{b.tagFg}}">{{b.tag}}</span>
+</div>
+<p style="margin: 0; font-size: 14px; font-weight: 700; opacity: .85">{{b.cond}}</p>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; white-space: pre-line">{{b.list}}</p>
+<p class="bebas" style="margin: auto 0 0; font-size: 30px; line-height: 1">{{b.value}} GRATIS</p>
+</div>
 </template>
 <template data-for="tiers" data-as="t">
 <div class="card" style="background: #ffffff; color: #0b0b0b; padding: 26px; border: 3px solid #0b0b0b; box-shadow: 10px 10px 0 {{t.shadow}}; display: flex; flex-direction: column; gap: 10px">
@@ -645,20 +652,32 @@ class Component extends DCLogic {
     let lvl = 0; T.forEach((t, k) => { if (hit(t)) lvl = k + 1; });
     const cur = lvl ? T[lvl - 1] : null;
     const bonusTotal = cur ? cur.v : 0;
+    const listOf = (t) => '• ' + t.gift.split(' + ').join('\n• ');
     const bonuses = T.map((t, k) => {
       const on = k + 1 === lvl, past = k + 1 < lvl;
+      const faltan = Math.max(0, t.pcs - count);
       return {
-        text: 'Nivel ' + t.n + ': ' + t.gift + ' (valor $' + t.v.toLocaleString('en-US') + ')',
-        state: on ? '¡Te lo llevas gratis!' : (past ? 'Superado →' : 'Por desbloquear:'),
-        bg: on ? '#f23b3b' : 'transparent', fg: on ? '#ffffff' : (past ? '#8a8a8a' : '#bdbdbd'), border: on ? '#f23b3b' : '#4a4a4a'
+        n: t.n, cond: t.pcs + ' piezas' + (t.amt ? ' o más de $' + t.amt.toLocaleString('en-US') : ''),
+        list: listOf(t), value: '$' + t.v.toLocaleString('en-US'),
+        tag: on ? 'TU REGALO' : (past ? 'SUPERADO' : 'FALTAN ' + faltan + (faltan === 1 ? ' PIEZA' : ' PIEZAS')),
+        bg: on ? '#f23b3b' : (past ? '#1a1a1a' : 'transparent'),
+        fg: on ? '#ffffff' : (past ? '#8a8a8a' : '#ffffff'),
+        border: on ? '#ffffff' : '#4a4a4a',
+        tagBg: on ? '#ffffff' : '#2a2a2a', tagFg: on ? '#d12a2a' : '#ffffff'
       };
     });
-    let nextHint;
-    if (lvl >= T.length) nextHint = '¡Nivel máximo! Te llevas todos los regalos.';
-    else {
-      const nx = T[lvl];
-      const faltan = Math.max(0, nx.pcs - count);
-      nextHint = (count === 0 ? 'Agrega piezas y empieza a llevarte contenido gratis. ' : '') + 'Con ' + faltan + ' pieza(s) más' + (nx.amt ? ' o pasando de $' + nx.amt.toLocaleString('en-US') : '') + ' subes al nivel ' + nx.n + ' y te llevas gratis: ' + nx.gift + '.';
+    let statusTitle, statusSub;
+    if (!cur) {
+      statusTitle = count === 0 ? 'Suma piezas y gana contenido gratis' : 'Vas por buen camino';
+      statusSub = 'Con ' + Math.max(0, T[0].pcs - count) + ' pieza(s) más te llevas gratis: ' + T[0].gift + '.';
+    } else {
+      statusTitle = '¡Nivel ' + cur.n + '! Te llevas gratis $' + cur.v.toLocaleString('en-US');
+      if (lvl < T.length) {
+        const nx = T[lvl];
+        statusSub = 'Ya tienes: ' + cur.gift + '. Con ' + Math.max(0, nx.pcs - count) + ' pieza(s) más' + (nx.amt ? ' (o pasando de $' + nx.amt.toLocaleString('en-US') + ')' : '') + ' subes al nivel ' + nx.n + ' y te llevas $' + nx.v.toLocaleString('en-US') + ' gratis.';
+      } else {
+        statusSub = 'Llegaste al nivel máximo: ' + cur.gift + '.';
+      }
     }
     const giftTxt = cur ? ' Nivel ' + cur.n + ', gratis: ' + cur.gift + '.' : '';
     const msg = chosen.length
@@ -689,8 +708,8 @@ class Component extends DCLogic {
       priceTabs, prices, colName: P[s.ptab].col,
       total: total.toLocaleString('en-US'), count, summary,
       perMonth: '', totalNote: '', tiers,
-      bonuses, nextHint, bonusValue: '$' + bonusTotal.toLocaleString('en-US'),
-      bonusBar: (lvl / T.length * 100) + '%',
+      bonuses, statusTitle, statusSub,
+      bonusBar: (Math.max(Math.min(count / 8, 1), lvl / T.length) * 100) + '%',
       brief: br, onMarca: setB('marca'), onPres: setB('presupuesto'), onTiempo: setB('tiempo'), onProy: setB('proyecto'),
       sendBrief, briefMail: 'mailto:info@nevolun.la?subject=' + encodeURIComponent('Quiero armar un paquete con Tinta Digital') + '&body=' + encodeURIComponent(briefMsg),
       waLink: 'https://wa.me/593993323801?text=' + encodeURIComponent(msg),
