@@ -290,7 +290,7 @@ a{color:#ffffff}a:hover{color:#ff6b6b}
 </div>
 <div style="flex: 1 1 420px">
 <p class="bebas" style="margin: 0; font-size: clamp(30px, 3vw, 42px); line-height: 1.2">CUÉNTANOS LO QUE BUSCAS, EL TIEMPO Y EL PRESUPUESTO CON EL QUE CUENTAS Y TE ARMAMOS UN PAQUETE CREATIVO Y ESTRATÉGICAMENTE PENSADO PARA POSICIONAR TUS IDEAS!</p>
-<p style="margin: 18px 0 0; font-size: 18px; line-height: 1.5; color: #e6e6e6">Los precios de la tabla son el punto de partida, no el techo. Cuando armamos un paquete contigo, <strong style="color: #ffffff">siempre te llevas algo extra.</strong></p>
+<p style="margin: 18px 0 0; font-size: 18px; line-height: 1.5; color: #e6e6e6">Los precios de la tabla son el punto de partida, no el techo. Así trabajamos: cuando armas un paquete con nosotros, <strong style="color: #ffffff">siempre te llevas contenido extra de regalo</strong>, y mientras más grande el paquete, más grande el regalo.</p>
 </div>
 </div>
 
@@ -635,12 +635,12 @@ class Component extends DCLogic {
     // Regalos por escalones (piezas o monto)
     const T = [
       { n: 1, name: 'ARRANQUE', pcs: 2, amt: null, gift: '2 historias de difusión', v: 90, shadow: '#1d8a96' },
-      { n: 2, name: 'IMPULSO', pcs: 4, amt: 1000, gift: '2 historias + 1 mención en segmento', v: 240, shadow: '#2563c9' },
-      { n: 3, name: 'EXPLOSIÓN', pcs: 6, amt: 2000, gift: '4 historias + 2 menciones en segmento', v: 480, shadow: '#f23b3b' },
-      { n: 4, name: 'TINTA TOTAL', pcs: 8, amt: 3000, gift: '4 historias + 2 menciones + 1 carrusel informativo básico', v: 769, shadow: '#0b0b0b' }
+      { n: 2, name: 'IMPULSO', pcs: 4, amt: 1000, gift: '2 historias + 2 menciones en segmento', v: 390, shadow: '#2563c9' },
+      { n: 3, name: 'EXPLOSIÓN', pcs: 6, amt: 2000, gift: '4 historias + 2 menciones + 1 carrusel informativo básico', v: 769, shadow: '#f23b3b' },
+      { n: 4, name: 'TINTA TOTAL', pcs: 8, amt: 3000, gift: '4 historias + 2 menciones + 1 carrusel informativo básico + 1 video informativo express', v: 1099, shadow: '#0b0b0b' }
     ];
     const condTxt = (t) => 'DESDE ' + t.pcs + ' PIEZAS' + (t.amt ? ' O MÁS DE $' + t.amt.toLocaleString('en-US') : '');
-    const tiers = T.map((t) => ({ n: t.n, name: t.name, shadow: t.shadow, gift: t.gift, cond: condTxt(t), value: '$' + t.v }));
+    const tiers = T.map((t) => ({ n: t.n, name: t.name, shadow: t.shadow, gift: t.gift, cond: condTxt(t), value: '$' + t.v.toLocaleString('en-US') }));
     const hit = (t) => count >= t.pcs || (t.amt !== null && total > t.amt);
     let lvl = 0; T.forEach((t, k) => { if (hit(t)) lvl = k + 1; });
     const cur = lvl ? T[lvl - 1] : null;
@@ -648,7 +648,7 @@ class Component extends DCLogic {
     const bonuses = T.map((t, k) => {
       const on = k + 1 === lvl, past = k + 1 < lvl;
       return {
-        text: 'Nivel ' + t.n + ': ' + t.gift + ' (valor $' + t.v + ')',
+        text: 'Nivel ' + t.n + ': ' + t.gift + ' (valor $' + t.v.toLocaleString('en-US') + ')',
         state: on ? '¡Tu regalo!' : (past ? 'Superado →' : 'Por desbloquear:'),
         bg: on ? '#f23b3b' : 'transparent', fg: on ? '#ffffff' : (past ? '#8a8a8a' : '#bdbdbd'), border: on ? '#f23b3b' : '#4a4a4a'
       };
